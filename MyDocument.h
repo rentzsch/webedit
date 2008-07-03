@@ -5,4 +5,6 @@
     IBOutlet    WebView     *webView;
     IBOutlet    NSTextView  *htmlSourceView;
 }
+
+- (IBAction)outlineAction:(id)sender_;
 @end

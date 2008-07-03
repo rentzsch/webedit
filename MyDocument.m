@@ -7,7 +7,6 @@
     if (self) {
         WebPreferences *wpref = [[[WebPreferences alloc] initWithIdentifier:@"com.rentzsch.webedit.user-modify"] autorelease];
         [wpref setUserStyleSheetEnabled:YES];
-        
         NSURL *cssFileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"user-modify" ofType:@"css"] isDirectory:NO];
         [wpref setUserStyleSheetLocation:cssFileURL];
     }
@@ -38,6 +37,7 @@ static NSString* prettyPrint(NSString *html) {
     [super windowControllerDidLoadNib:controller_];
     
     [webView setEditingDelegate:self];
+    [webView setUIDelegate:self];
     
     NSString *html = prettyPrint(@"<html><head><title>title</title></head><body><p>body</p></body></html>");
     [[webView mainFrame] loadHTMLString:html baseURL:nil];
@@ -78,6 +78,17 @@ static NSString* prettyPrint(NSString *html) {
 		*error_ = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
 	}
     return YES;
+}
+
+- (IBAction)outlineAction:(id)sender_ {
+    [webView stringByEvaluatingJavaScriptFromString:@"document.execCommand('InsertUnorderedList', false, null);"];
+}
+
+#pragma mark -
+#pragma mark WebUIDelegate
+
+- (void)webView:(WebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WebFrame *)frame {
+    NSLog(@"js: %@", message);
 }
 
 @end
