@@ -18,6 +18,19 @@
     return @"MyDocument";
 }
 
+static NSString* prettyPrint(NSString *html) {
+    html = [html stringByReplacingOccurrencesOfString:@"<br>" withString:@"<br/>"]; // This line saves us from having to do NSXMLDocumentTidyHTML.
+    
+    NSError *error = nil;
+    NSXMLDocument *xmlDoc = [[[NSXMLDocument alloc] initWithXMLString:html options:0 error:&error] autorelease];
+    if (xmlDoc) {
+        return [[xmlDoc XMLStringWithOptions:NSXMLNodePrettyPrint] substringFromIndex:1];
+    } else {
+        NSLog(@"\nERROR\n%@\n\nSOURCE\n%@", error, html);
+        return nil;
+    }
+}
+
 - (void)windowControllerDidLoadNib:(NSWindowController*)controller_ {
     assert(webView);
     assert(htmlSourceView);
@@ -26,28 +39,17 @@
     
     [webView setEditingDelegate:self];
     
-    [[webView mainFrame] loadHTMLString:@"<html><head><title>title</title></head><body><p>body</p></body></html>"
-                                baseURL:nil];
-}
-
-- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame {
-    [self webViewDidChange:nil];
+    NSString *html = prettyPrint(@"<html><head><title>title</title></head><body><p>body</p></body></html>");
+    [[webView mainFrame] loadHTMLString:html baseURL:nil];
+    [htmlSourceView setString:html];
 }
 
 - (void)webViewDidChange:(NSNotification*)notification_ {
-    NSString *unformattedHTML = [(DOMHTMLElement*)[[[webView mainFrame] DOMDocument] documentElement] outerHTML];
-    
-    unformattedHTML = [unformattedHTML stringByReplacingOccurrencesOfString:@"<br>" withString:@"<br/>"]; // This line saves us from having to do NSXMLDocumentTidyHTML.
-    
-    NSError *error = nil;
-    NSXMLDocument *xmlDoc = [[[NSXMLDocument alloc] initWithXMLString:unformattedHTML options:0 error:&error] autorelease];
-    if (xmlDoc) {
-        [xmlDoc setDocumentContentKind:NSXMLDocumentHTMLKind];
-        NSString *formattedHTML = [xmlDoc XMLStringWithOptions:NSXMLNodePrettyPrint];
-        [htmlSourceView setString:[formattedHTML substringFromIndex:1]];
-    } else {
-        [htmlSourceView setString:[NSString stringWithFormat:@"ERROR\n%@\n\nSOURCE\n%@", error, unformattedHTML]];
-    }
+    [htmlSourceView setString:prettyPrint([(DOMHTMLElement*)[[[webView mainFrame] DOMDocument] documentElement] outerHTML])];
+}
+
+- (void)textDidChange:(NSNotification*)notification_ {
+    [[webView mainFrame] loadHTMLString:prettyPrint([htmlSourceView string]) baseURL:nil];
 }
 
 - (NSData*)dataOfType:(NSString*)typeName_ error:(NSError**)error_
