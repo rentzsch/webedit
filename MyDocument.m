@@ -5,6 +5,11 @@
 - (id)init {
     self = [super init];
     if (self) {
+        WebPreferences *wpref = [[[WebPreferences alloc] initWithIdentifier:@"com.rentzsch.webedit.user-modify"] autorelease];
+        [wpref setUserStyleSheetEnabled:YES];
+        
+        NSURL *cssFileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"user-modify" ofType:@"css"] isDirectory:NO];
+        [wpref setUserStyleSheetLocation:cssFileURL];
     }
     return self;
 }
@@ -21,40 +26,11 @@
     
     [webView setEditingDelegate:self];
     
-    [[webView mainFrame] loadHTMLString:
-#if 1
-     @"<html><head><title>title</title><style type=\"text/css\"></style></head><body>body</body></html>"
-#else
-     @"<html><head><title>title</title><style type=\"text/css\">body{color:red;}</style></head><body contentEditable=true>body</body></html>"
-#endif
+    [[webView mainFrame] loadHTMLString:@"<html><head><title>title</title></head><body>body</body></html>"
                                 baseURL:nil];
 }
 
-// DOMCSSRule > DOMObject
-// DOMCSSStyleDeclaration > DOMObject
-// DOMCSSValue > DOMObject
-// createCSSStyleDeclaration
-// DOMStyleSheet > DOMObject
-
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame {
-    //DOMCSSStyleDeclaration *style = [[webView mainFrameDocument] createCSSStyleDeclaration];
-    //[style setCssText:@"-webkit-user-modify: read-write"];
-    //[style setProperty:@"-webkit-user-modify" value:@"read-write" priority:@"important"];
-    //--; // add `-webkit-user-modify: read-write;` css rule
-    
-    DOMStyleSheetList *stylesheetList = [webView mainFrameDocument].styleSheets;
-    unsigned stylesheetIndex = 0, stylesheetCount = stylesheetList.length;
-    for (; stylesheetIndex < stylesheetCount; stylesheetIndex++) {
-        DOMCSSStyleSheet *stylesheet = (DOMCSSStyleSheet*)[stylesheetList item:stylesheetIndex];
-        [stylesheet insertRule:@"body {-webkit-user-modify:read-write;}" index:0]; // TODO add our own stylesheet
-        
-        DOMCSSRuleList *ruleList = stylesheet.cssRules;
-        unsigned ruleIndex = 0, ruleCount = ruleList.length;
-        for (; ruleIndex < ruleCount; ruleIndex++) {
-            DOMCSSRule *rule = [ruleList item:ruleIndex];
-            //NSLog(@"rule[%d]: %@", ruleIndex, rule.cssText);
-        }
-    }
     [self webViewDidChange:nil];
 }
 

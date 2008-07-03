@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7957D4140E0AB946005C78E8 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7957D4130E0AB946005C78E8 /* WebKit.framework */; };
+		799A41C90E1D4868007361DA /* user-modify.css in Resources */ = {isa = PBXBuildFile; fileRef = 799A41C80E1D4868007361DA /* user-modify.css */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
 		8D15AC2E0486D014006FF6A4 /* MyDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B4FDCFA73011CA2CEA /* MyDocument.nib */; };
@@ -31,6 +32,7 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* WebEdit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebEdit_Prefix.pch; sourceTree = "<group>"; };
 		7957D4130E0AB946005C78E8 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		799A41C80E1D4868007361DA /* user-modify.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "user-modify.css"; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* WebEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -108,6 +110,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				799A41C80E1D4868007361DA /* user-modify.css */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */,
 				2A37F4B4FDCFA73011CA2CEA /* MyDocument.nib */,
@@ -173,6 +176,7 @@
 				8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */,
 				8D15AC2E0486D014006FF6A4 /* MyDocument.nib in Resources */,
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
+				799A41C90E1D4868007361DA /* user-modify.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
