@@ -26,7 +26,7 @@
     
     [webView setEditingDelegate:self];
     
-    [[webView mainFrame] loadHTMLString:@"<html><head><title>title</title></head><body>body</body></html>"
+    [[webView mainFrame] loadHTMLString:@"<html><head><title>title</title></head><body><p>body</p></body></html>"
                                 baseURL:nil];
 }
 
@@ -35,7 +35,19 @@
 }
 
 - (void)webViewDidChange:(NSNotification*)notification_ {
-    [htmlSourceView setString:[(DOMHTMLElement*)[[[webView mainFrame] DOMDocument] documentElement] outerHTML]];
+    NSString *unformattedHTML = [(DOMHTMLElement*)[[[webView mainFrame] DOMDocument] documentElement] outerHTML];
+    
+    unformattedHTML = [unformattedHTML stringByReplacingOccurrencesOfString:@"<br>" withString:@"<br/>"]; // This line saves us from having to do NSXMLDocumentTidyHTML.
+    
+    NSError *error = nil;
+    NSXMLDocument *xmlDoc = [[[NSXMLDocument alloc] initWithXMLString:unformattedHTML options:0 error:&error] autorelease];
+    if (xmlDoc) {
+        [xmlDoc setDocumentContentKind:NSXMLDocumentHTMLKind];
+        NSString *formattedHTML = [xmlDoc XMLStringWithOptions:NSXMLNodePrettyPrint];
+        [htmlSourceView setString:[formattedHTML substringFromIndex:1]];
+    } else {
+        [htmlSourceView setString:[NSString stringWithFormat:@"ERROR\n%@\n\nSOURCE\n%@", error, unformattedHTML]];
+    }
 }
 
 - (NSData*)dataOfType:(NSString*)typeName_ error:(NSError**)error_
